@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/suggest_reply"
+        android:title="@string/suggest_reply" />
+    <item
+        android:id="@+id/check_grammar"
+        android:title="@string/check_grammar" />
+    <item
+        android:id="@+id/change_style_container"
+        android:title="@string/change_style">
+        <menu>
+            <item
+                android:id="@+id/style_professional"
+                android:title="@string/style_professional" />
+            <item
+                android:id="@+id/style_casual"
+                android:title="@string/style_casual" />
+            <item
+                android:id="@+id/style_funny"
+                android:title="@string/style_funny" />
+        </menu>
+    </item>
+</menu>
