@@ -48,6 +48,7 @@ import org.briarproject.briar.android.activity.BriarActivity;
 import org.briarproject.briar.android.attachment.AttachmentItem;
 import org.briarproject.briar.android.attachment.AttachmentRetriever;
 import org.briarproject.briar.android.blog.BlogActivity;
+import org.briarproject.briar.android.call.CallActivity;
 import org.briarproject.briar.android.contact.connect.ConnectViaBluetoothActivity;
 import org.briarproject.briar.android.conversation.ConversationVisitor.AttachmentCache;
 import org.briarproject.briar.android.conversation.ConversationVisitor.TextCache;
@@ -401,6 +402,12 @@ public class ConversationActivity extends BriarActivity
 		int itemId = item.getItemId();
 		if (itemId == android.R.id.home) {
 			onBackPressed();
+			return true;
+		} else if (itemId == R.id.action_video_call) {
+			startCall(true);
+			return true;
+		} else if (itemId == R.id.action_voice_call) {
+			startCall(false);
 			return true;
 		} else if (itemId == R.id.action_introduction) {
 			Intent intent = new Intent(this, IntroductionActivity.class);
@@ -1089,6 +1096,13 @@ public class ConversationActivity extends BriarActivity
 				ConversationSettingsDialog.newInstance(contactId);
 		dialog.show(getSupportFragmentManager(),
 				ConversationSettingsDialog.TAG);
+	}
+
+	private void startCall(boolean video) {
+		Intent i = new Intent(this, CallActivity.class);
+		i.putExtra(CallActivity.CONTACT_ID, contactId.getInt());
+		i.putExtra(CallActivity.VIDEO, video);
+		startActivity(i);
 	}
 
 	@DatabaseExecutor

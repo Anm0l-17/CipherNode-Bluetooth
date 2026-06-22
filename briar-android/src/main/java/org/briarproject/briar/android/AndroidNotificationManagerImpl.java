@@ -29,6 +29,7 @@ import org.briarproject.bramble.api.system.AndroidExecutor;
 import org.briarproject.bramble.api.system.Clock;
 import org.briarproject.bramble.util.StringUtils;
 import org.briarproject.briar.R;
+import org.briarproject.briar.android.call.CallActivity;
 import org.briarproject.briar.android.conversation.ConversationActivity;
 import org.briarproject.briar.android.forum.ForumActivity;
 import org.briarproject.briar.android.hotspot.HotspotActivity;
@@ -67,21 +68,26 @@ import static android.app.Notification.DEFAULT_LIGHTS;
 import static android.app.Notification.DEFAULT_SOUND;
 import static android.app.Notification.DEFAULT_VIBRATE;
 import static android.app.NotificationManager.IMPORTANCE_DEFAULT;
+import static android.app.NotificationManager.IMPORTANCE_HIGH;
 import static android.app.NotificationManager.IMPORTANCE_LOW;
 import static android.app.PendingIntent.getActivity;
 import static android.app.PendingIntent.getBroadcast;
+import static android.app.PendingIntent.getService;
 import static android.content.Context.NOTIFICATION_SERVICE;
 import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP;
 import static android.net.Uri.EMPTY;
 import static android.os.Build.VERSION.SDK_INT;
+import static androidx.core.app.NotificationCompat.CATEGORY_CALL;
 import static androidx.core.app.NotificationCompat.CATEGORY_MESSAGE;
 import static androidx.core.app.NotificationCompat.CATEGORY_SERVICE;
 import static androidx.core.app.NotificationCompat.CATEGORY_SOCIAL;
 import static androidx.core.app.NotificationCompat.PRIORITY_HIGH;
 import static androidx.core.app.NotificationCompat.PRIORITY_LOW;
+import static androidx.core.app.NotificationCompat.PRIORITY_MAX;
 import static androidx.core.app.NotificationCompat.PRIORITY_MIN;
+import static androidx.core.app.NotificationCompat.VISIBILITY_PUBLIC;
 import static androidx.core.app.NotificationCompat.VISIBILITY_SECRET;
 import static androidx.core.content.ContextCompat.getColor;
 import static org.briarproject.bramble.util.AndroidUtils.getImmutableFlags;
@@ -101,6 +107,8 @@ class AndroidNotificationManagerImpl implements AndroidNotificationManager,
 		Service, EventListener {
 
 	private static final long SOUND_DELAY = TimeUnit.SECONDS.toMillis(2);
+	private static final int CALL_NOTIFICATION_ID = 100;
+	private static final String CALL_CHANNEL_ID = "calls";
 
 	private final SettingsManager settingsManager;
 	private final AndroidExecutor androidExecutor;
@@ -158,6 +166,7 @@ class AndroidNotificationManagerImpl implements AndroidNotificationManager,
 						R.string.forums_button);
 				createNotificationChannel(BLOG_CHANNEL_ID,
 						R.string.blogs_button);
+				createCallNotificationChannel();
 				return null;
 			};
 			try {
@@ -178,6 +187,17 @@ class AndroidNotificationManagerImpl implements AndroidNotificationManager,
 		nc.enableVibration(true);
 		nc.enableLights(true);
 		nc.setLightColor(getColor(appContext, R.color.briar_lime_400));
+		notificationManager.createNotificationChannel(nc);
+	}
+
+	@TargetApi(26)
+	private void createCallNotificationChannel() {
+		NotificationChannel nc = new NotificationChannel(CALL_CHANNEL_ID,
+				"Calls", IMPORTANCE_HIGH);
+		nc.setLockscreenVisibility(VISIBILITY_PUBLIC);
+		nc.enableVibration(true);
+		nc.enableLights(true);
+		nc.setLightColor(getColor(appContext, R.color.briar_red_500));
 		notificationManager.createNotificationChannel(nc);
 	}
 
@@ -778,6 +798,46 @@ class AndroidNotificationManagerImpl implements AndroidNotificationManager,
 	@Override
 	public void clearHotspotNotification() {
 		notificationManager.cancel(HOTSPOT_NOTIFICATION_ID);
+	}
+
+	@Override
+	public void showIncomingCallNotification(ContactId contactId, boolean video) {
+		NotificationCompat.Builder b = new NotificationCompat.Builder(appContext, CALL_CHANNEL_ID);
+		b.setSmallIcon(R.drawable.notification_ongoing);
+		b.setColor(getColor(appContext, R.color.briar_red_500));
+		b.setContentTitle("Incoming Call");
+		b.setContentText("Contact is calling you...");
+		b.setPriority(PRIORITY_MAX);
+		b.setCategory(CATEGORY_CALL);
+		b.setOngoing(true);
+		b.setAutoCancel(false);
+		b.setFullScreenIntent(getCallPendingIntent(contactId, video), true);
+
+		Intent answerIntent = new Intent(appContext, BriarService.class);
+		answerIntent.setAction(ACTION_ANSWER_CALL);
+		answerIntent.putExtra(CONTACT_ID, contactId.getInt());
+		b.addAction(R.drawable.ic_call, "Answer", getService(appContext, nextRequestId++, answerIntent, getImmutableFlags(0)));
+
+		Intent declineIntent = new Intent(appContext, BriarService.class);
+		declineIntent.setAction(ACTION_DECLINE_CALL);
+		declineIntent.putExtra(CONTACT_ID, contactId.getInt());
+		b.addAction(R.drawable.ic_call_end, "Decline", getService(appContext, nextRequestId++, declineIntent, getImmutableFlags(0)));
+
+		notificationManager.notify(CALL_NOTIFICATION_ID, b.build());
+	}
+
+	private PendingIntent getCallPendingIntent(ContactId contactId, boolean video) {
+		Intent i = new Intent(appContext, CallActivity.class);
+		i.putExtra(CallActivity.CONTACT_ID, contactId.getInt());
+		i.putExtra(CallActivity.VIDEO, video);
+		i.putExtra(CallActivity.IS_INCOMING, true);
+		i.setFlags(FLAG_ACTIVITY_NEW_TASK | FLAG_ACTIVITY_CLEAR_TOP);
+		return getActivity(appContext, nextRequestId++, i, getImmutableFlags(0));
+	}
+
+	@Override
+	public void clearIncomingCallNotification(ContactId contactId) {
+		notificationManager.cancel(CALL_NOTIFICATION_ID);
 	}
 
 	@Override

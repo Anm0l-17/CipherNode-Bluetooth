@@ -49,6 +49,8 @@ public interface AndroidNotificationManager {
 	// Actions for pending intents
 	String ACTION_DISMISS_REMINDER = "dismissReminder";
 	String ACTION_STOP_HOTSPOT = "stopHotspot";
+	String ACTION_ANSWER_CALL = "answerCall";
+	String ACTION_DECLINE_CALL = "declineCall";
 
 	Notification getForegroundNotification();
 
@@ -101,6 +103,10 @@ public interface AndroidNotificationManager {
 	void showHotspotNotification();
 
 	void clearHotspotNotification();
+
+	void showIncomingCallNotification(ContactId contactId, boolean video);
+
+	void clearIncomingCallNotification(ContactId contactId);
 
 	void showMailboxProblemNotification();
 

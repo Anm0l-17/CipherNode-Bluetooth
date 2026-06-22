@@ -33,6 +33,7 @@
 		android:maxSdkVersion="18"
 		tools:ignore="ScopedStorage" />
 	<uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+	<uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
 
 	<uses-permission-sdk-23
 		android:name="android.permission.ACCESS_FINE_LOCATION"
@@ -42,6 +43,7 @@
 	<uses-permission-sdk-23 android:name="android.permission.FOREGROUND_SERVICE" />
 	<uses-permission-sdk-23 android:name="android.permission.FOREGROUND_SERVICE_CONNECTED_DEVICE" />
 	<uses-permission-sdk-23 android:name="android.permission.FOREGROUND_SERVICE_MICROPHONE" />
+	<uses-permission-sdk-23 android:name="android.permission.FOREGROUND_SERVICE_CAMERA" />
 
 	<uses-permission
 		android:name="android.permission.HIDE_OVERLAY_WINDOWS"

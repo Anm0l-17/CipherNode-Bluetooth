@@ -24,4 +24,17 @@ public interface CallManager {
 
 	void sendIceCandidate(ContactId contactId, String label, int index,
 			String candidate) throws DbException;
+
+	void setCallListener(CallListener listener);
+
+	interface CallListener {
+		void onOfferReceived(ContactId contactId, String sdp);
+
+		void onAnswerReceived(ContactId contactId, String sdp);
+
+		void onIceCandidateReceived(ContactId contactId, String label, int index,
+				String candidate);
+
+		void onHangupReceived(ContactId contactId);
+	}
 }

@@ -146,6 +146,12 @@ public class AppModule {
 
 	@Provides
 	@Singleton
+	Context providesContext() {
+		return application.getApplicationContext();
+	}
+
+	@Provides
+	@Singleton
 	DatabaseConfig provideDatabaseConfig(Application app) {
 		//FIXME: StrictMode
 		StrictMode.ThreadPolicy tp = StrictMode.allowThreadDiskReads();

@@ -4,6 +4,7 @@ import android.app.Application;
 
 import org.webrtc.PeerConnectionFactory;
 
+import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -11,6 +12,11 @@ import dagger.Provides;
 
 @Module
 public class AndroidCallModule {
+
+	public static class EagerSingletons {
+		@Inject
+		WebRtcManager webRtcManager;
+	}
 
 	@Provides
 	@Singleton

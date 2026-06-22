@@ -17,16 +17,20 @@ import com.bumptech.glide.Glide;
 
 import org.briarproject.android.dontkillmelib.wakelock.AndroidWakeLockManager;
 import org.briarproject.bramble.api.account.AccountManager;
+import org.briarproject.bramble.api.contact.ContactId;
 import org.briarproject.bramble.api.crypto.SecretKey;
+import org.briarproject.bramble.api.db.DbException;
 import org.briarproject.bramble.api.lifecycle.LifecycleManager;
 import org.briarproject.bramble.api.lifecycle.LifecycleManager.StartResult;
 import org.briarproject.bramble.api.system.AndroidExecutor;
 import org.briarproject.bramble.api.system.Clock;
 import org.briarproject.bramble.util.AndroidUtils;
 import org.briarproject.briar.R;
+import org.briarproject.briar.android.call.CallActivity;
 import org.briarproject.briar.android.logout.HideUiActivity;
 import org.briarproject.briar.api.android.AndroidNotificationManager;
 import org.briarproject.briar.api.android.LockManager;
+import org.briarproject.briar.api.call.CallManager;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -53,6 +57,9 @@ import static org.briarproject.bramble.api.lifecycle.LifecycleManager.StartResul
 import static org.briarproject.bramble.api.lifecycle.LifecycleManager.StartResult.SUCCESS;
 import static org.briarproject.bramble.util.AndroidUtils.isUiThread;
 import static org.briarproject.briar.android.BriarApplication.ENTRY_ACTIVITY;
+import static org.briarproject.briar.android.conversation.ConversationActivity.CONTACT_ID;
+import static org.briarproject.briar.api.android.AndroidNotificationManager.ACTION_ANSWER_CALL;
+import static org.briarproject.briar.api.android.AndroidNotificationManager.ACTION_DECLINE_CALL;
 import static org.briarproject.briar.api.android.AndroidNotificationManager.ONGOING_CHANNEL_ID;
 import static org.briarproject.briar.api.android.AndroidNotificationManager.ONGOING_CHANNEL_OLD_ID;
 import static org.briarproject.briar.api.android.AndroidNotificationManager.ONGOING_NOTIFICATION_ID;
@@ -91,6 +98,8 @@ public class BriarService extends Service {
 	LockManager lockManager;
 	@Inject
 	AndroidWakeLockManager wakeLockManager;
+	@Inject
+	CallManager callManager;
 
 	// Fields that are accessed from background threads must be volatile
 	@Inject
@@ -199,12 +208,35 @@ public class BriarService extends Service {
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-		if (ACTION_LOCK.equals(intent.getAction())) {
+		String action = intent.getAction();
+		if (ACTION_LOCK.equals(action)) {
 			int pid = intent.getIntExtra(EXTRA_PID, -1);
 			if (pid == myPid()) lockManager.setLocked(true);
 			else if (LOG.isLoggable(WARNING)) {
 				LOG.warning("Tried to lock process " + pid + " but this is " +
 						myPid());
+			}
+		} else if (ACTION_ANSWER_CALL.equals(action)) {
+			int id = intent.getIntExtra(CONTACT_ID, -1);
+			if (id != -1) {
+				ContactId contactId = new ContactId(id);
+				notificationManager.clearIncomingCallNotification(contactId);
+				Intent i = new Intent(this, CallActivity.class);
+				i.putExtra(CallActivity.CONTACT_ID, id);
+				i.putExtra(CallActivity.IS_INCOMING, true);
+				i.setFlags(FLAG_ACTIVITY_NEW_TASK);
+				startActivity(i);
+			}
+		} else if (ACTION_DECLINE_CALL.equals(action)) {
+			int id = intent.getIntExtra(CONTACT_ID, -1);
+			if (id != -1) {
+				ContactId contactId = new ContactId(id);
+				notificationManager.clearIncomingCallNotification(contactId);
+				try {
+					callManager.endCall(contactId);
+				} catch (DbException e) {
+					LOG.warning("Failed to end call");
+				}
 			}
 		}
 		return START_NOT_STICKY; // Don't restart automatically if killed

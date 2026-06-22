@@ -35,7 +35,9 @@ import org.briarproject.briar.BriarCoreModule;
 import org.briarproject.briar.android.attachment.AttachmentModule;
 import org.briarproject.briar.android.attachment.media.MediaModule;
 import org.briarproject.briar.android.call.AndroidCallModule;
+import org.briarproject.briar.android.call.CallActivity;
 import org.briarproject.briar.android.call.CallService;
+import org.briarproject.briar.android.call.WebRtcManager;
 import org.briarproject.briar.android.contact.connect.BluetoothIntroFragment;
 import org.briarproject.briar.android.conversation.glide.BriarModelLoader;
 import org.briarproject.briar.android.hotspot.AbstractTabsFragment;
@@ -215,6 +217,8 @@ public interface AndroidComponent
 	Thread.UncaughtExceptionHandler exceptionHandler();
 
 	AutoDeleteManager autoDeleteManager();
+
+	WebRtcManager webRtcManager();
 
 	void inject(SignInReminderReceiver briarService);
 

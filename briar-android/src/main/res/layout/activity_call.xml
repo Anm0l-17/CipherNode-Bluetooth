@@ -30,4 +30,16 @@
 		app:srcCompat="@drawable/ic_call_end"
 		app:tint="@android:color/white" />
 
+	<com.google.android.material.floatingactionbutton.FloatingActionButton
+		android:id="@+id/switch_camera_button"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="32dp"
+		android:layout_marginBottom="32dp"
+		app:backgroundTint="@color/briar_blue_400"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintStart_toEndOf="@+id/hangup_button"
+		app:srcCompat="@drawable/ic_switch_camera"
+		app:tint="@android:color/white" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
