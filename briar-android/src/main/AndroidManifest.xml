@@ -20,6 +20,8 @@
 		android:usesPermissionFlags="neverForLocation"
 		tools:targetApi="31" />
 	<uses-permission android:name="android.permission.CAMERA" />
+	<uses-permission android:name="android.permission.RECORD_AUDIO" />
+	<uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
 	<uses-permission android:name="android.permission.INTERNET" />
 	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 	<!--suppress DeprecatedClassUsageInspection -->
@@ -39,6 +41,7 @@
 	<uses-permission-sdk-23 android:name="android.permission.USE_BIOMETRIC" />
 	<uses-permission-sdk-23 android:name="android.permission.FOREGROUND_SERVICE" />
 	<uses-permission-sdk-23 android:name="android.permission.FOREGROUND_SERVICE_CONNECTED_DEVICE" />
+	<uses-permission-sdk-23 android:name="android.permission.FOREGROUND_SERVICE_MICROPHONE" />
 
 	<uses-permission
 		android:name="android.permission.HIDE_OVERLAY_WINDOWS"
@@ -519,6 +522,19 @@
 				android:name="android.support.PARENT_ACTIVITY"
 				android:value="org.briarproject.briar.android.settings.SettingsActivity" />
 		</activity>
+
+		<activity
+			android:name=".android.call.CallActivity"
+			android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
+			android:exported="false"
+			android:launchMode="singleInstance"
+			android:supportsPictureInPicture="true"
+			android:theme="@style/BriarTheme.NoActionBar" />
+
+		<service
+			android:name=".android.call.CallService"
+			android:exported="false"
+			android:foregroundServiceType="microphone" />
 
 	</application>
 

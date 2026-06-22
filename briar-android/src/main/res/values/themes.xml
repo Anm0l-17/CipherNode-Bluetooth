@@ -43,10 +43,10 @@
 	</style>
 
 	<style name="ActivityAnimation" parent="@android:style/Animation.Activity">
-		<item name="android:activityOpenEnterAnimation">@anim/screen_new_in</item>
-		<item name="android:activityOpenExitAnimation">@anim/screen_old_out</item>
-		<item name="android:activityCloseEnterAnimation">@anim/screen_old_in</item>
-		<item name="android:activityCloseExitAnimation">@anim/screen_new_out</item>
+		<item name="android:activityOpenEnterAnimation">@anim/material_enter</item>
+		<item name="android:activityOpenExitAnimation">@anim/material_exit</item>
+		<item name="android:activityCloseEnterAnimation">@anim/fade_in</item>
+		<item name="android:activityCloseExitAnimation">@anim/material_exit</item>
 	</style>
 
 	<style name="BriarDialogTheme" parent="Theme.Material3.DayNight.Dialog">

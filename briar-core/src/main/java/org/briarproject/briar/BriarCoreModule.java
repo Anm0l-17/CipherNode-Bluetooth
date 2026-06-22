@@ -4,6 +4,7 @@ import org.briarproject.briar.attachment.AttachmentModule;
 import org.briarproject.briar.autodelete.AutoDeleteModule;
 import org.briarproject.briar.avatar.AvatarModule;
 import org.briarproject.briar.blog.BlogModule;
+import org.briarproject.briar.call.CallModule;
 import org.briarproject.briar.client.BriarClientModule;
 import org.briarproject.briar.conversation.ConversationModule;
 import org.briarproject.briar.feed.FeedModule;
@@ -23,6 +24,7 @@ import dagger.Module;
 		AutoDeleteModule.class,
 		AvatarModule.class,
 		BlogModule.class,
+		CallModule.class,
 		BriarClientModule.class,
 		ConversationModule.class,
 		FeedModule.class,

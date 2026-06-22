@@ -34,6 +34,8 @@ import org.briarproject.briar.BriarCoreEagerSingletons;
 import org.briarproject.briar.BriarCoreModule;
 import org.briarproject.briar.android.attachment.AttachmentModule;
 import org.briarproject.briar.android.attachment.media.MediaModule;
+import org.briarproject.briar.android.call.AndroidCallModule;
+import org.briarproject.briar.android.call.CallService;
 import org.briarproject.briar.android.contact.connect.BluetoothIntroFragment;
 import org.briarproject.briar.android.conversation.glide.BriarModelLoader;
 import org.briarproject.briar.android.hotspot.AbstractTabsFragment;
@@ -99,6 +101,7 @@ import dagger.Component;
 		BrambleAndroidModule.class,
 		BriarAccountModule.class,
 		AppModule.class,
+		AndroidCallModule.class,
 		AttachmentModule.class,
 		ClockModule.class,
 		MediaModule.class,
@@ -216,6 +219,8 @@ public interface AndroidComponent
 	void inject(SignInReminderReceiver briarService);
 
 	void inject(BriarService briarService);
+
+	void inject(CallService callService);
 
 	void inject(NotificationCleanupService notificationCleanupService);
 

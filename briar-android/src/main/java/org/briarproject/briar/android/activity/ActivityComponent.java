@@ -7,6 +7,7 @@ import org.briarproject.briar.android.StartupFailureActivity;
 import org.briarproject.briar.android.account.SetupActivity;
 import org.briarproject.briar.android.account.SetupFragment;
 import org.briarproject.briar.android.account.UnlockActivity;
+import org.briarproject.briar.android.call.CallActivity;
 import org.briarproject.briar.android.blog.BlogActivity;
 import org.briarproject.briar.android.blog.BlogFragment;
 import org.briarproject.briar.android.blog.BlogPostFragment;
@@ -112,6 +113,8 @@ public interface ActivityComponent {
 	void inject(PanicPreferencesActivity activity);
 
 	void inject(AddNearbyContactActivity activity);
+
+	void inject(CallActivity activity);
 
 	void inject(ConversationActivity activity);
 

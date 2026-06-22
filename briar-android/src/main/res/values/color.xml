@@ -61,8 +61,8 @@
 
 	<color name="color_primary">#dd000000</color>
 
-	<color name="msg_in">@android:color/white</color>
-	<color name="msg_out">@color/briar_blue_400</color>
+	<color name="msg_in">@color/md_theme_surfaceDim</color>
+	<color name="msg_out">@color/md_theme_primary</color>
 	<color name="notice_in">@color/briar_night_50</color>
 	<color name="notice_out">@color/briar_blue_600</color>
 	<color name="msg_stroke_light">@color/briar_gray_300</color>

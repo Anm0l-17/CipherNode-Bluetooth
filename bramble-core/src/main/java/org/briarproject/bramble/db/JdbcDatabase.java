@@ -101,7 +101,7 @@ import static org.briarproject.bramble.util.LogUtils.now;
 abstract class JdbcDatabase implements Database<Connection> {
 
 	// Package access for testing
-	static final int CODE_SCHEMA_VERSION = 50;
+	static final int CODE_SCHEMA_VERSION = 51;
 
 	/**
 	 * The maximum number of idle connections to keep open.
@@ -325,6 +325,19 @@ abstract class JdbcDatabase implements Database<Connection> {
 					+ " REFERENCES outgoingKeys (keySetId)"
 					+ " ON DELETE CASCADE)";
 
+	private static final String CREATE_CALL_LOGS =
+			"CREATE TABLE callLogs"
+					+ " (callId _COUNTER,"
+					+ " contactId INT NOT NULL,"
+					+ " timestamp BIGINT NOT NULL,"
+					+ " duration BIGINT NOT NULL,"
+					+ " type INT NOT NULL,"
+					+ " video BOOLEAN NOT NULL,"
+					+ " PRIMARY KEY (callId),"
+					+ " FOREIGN KEY (contactId)"
+					+ " REFERENCES contacts (contactId)"
+					+ " ON DELETE CASCADE)";
+
 	private static final String INDEX_CONTACTS_BY_AUTHOR_ID =
 			"CREATE INDEX IF NOT EXISTS contactsByAuthorId"
 					+ " ON contacts (authorId)";
@@ -499,7 +512,8 @@ abstract class JdbcDatabase implements Database<Connection> {
 				new Migration46_47(dbTypes),
 				new Migration47_48(),
 				new Migration48_49(),
-				new Migration49_50()
+				new Migration49_50(),
+				new Migration50_51(dbTypes)
 		);
 	}
 
@@ -545,6 +559,7 @@ abstract class JdbcDatabase implements Database<Connection> {
 			s.executeUpdate(dbTypes.replaceTypes(CREATE_PENDING_CONTACTS));
 			s.executeUpdate(dbTypes.replaceTypes(CREATE_OUTGOING_KEYS));
 			s.executeUpdate(dbTypes.replaceTypes(CREATE_INCOMING_KEYS));
+			s.executeUpdate(dbTypes.replaceTypes(CREATE_CALL_LOGS));
 			s.close();
 		} catch (SQLException e) {
 			tryToClose(s, LOG, WARNING);
