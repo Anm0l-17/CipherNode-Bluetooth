@@ -20,6 +20,7 @@ android {
 	buildToolsVersion '35.0.0'
 	packagingOptions {
 		jniLibs {
+			useLegacyPackaging = false
 			keepDebugSymbols += ['**/*.so']
 		}
 	}
@@ -126,7 +127,7 @@ dependencies {
 	implementation 'com.google.zxing:core:3.3.3'  // newer version need minSdk 24
 	implementation 'uk.co.samuelwall:material-tap-target-prompt:3.3.2'
 	implementation 'com.google.mlkit:smart-reply:17.0.4'
-	implementation 'io.github.webrtc-sdk:android:114.5735.09'
+	implementation 'io.github.webrtc-sdk:android:144.7559.09'
 	implementation 'com.vanniktech:emoji-google:0.9.0' // newer versions are more work to adapt
 	implementation 'com.github.kobakei:MaterialFabSpeedDial:1.2.1'
 	implementation 'com.github.chrisbanes:PhotoView:2.3.0'
