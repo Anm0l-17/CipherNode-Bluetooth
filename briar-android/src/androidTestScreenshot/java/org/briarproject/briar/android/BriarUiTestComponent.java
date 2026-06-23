@@ -9,6 +9,7 @@ import org.briarproject.bramble.system.ClockModule;
 import org.briarproject.briar.BriarCoreModule;
 import org.briarproject.briar.android.attachment.AttachmentModule;
 import org.briarproject.briar.android.attachment.media.MediaModule;
+import org.briarproject.briar.android.call.AndroidCallModule;
 import org.briarproject.briar.android.conversation.ConversationActivityScreenshotTest;
 import org.briarproject.briar.android.settings.SettingsActivityScreenshotTest;
 
@@ -22,6 +23,7 @@ import dagger.Component;
 		AttachmentModule.class,
 		ClockModule.class,
 		MediaModule.class,
+		AndroidCallModule.class,
 		RemovableDriveModule.class,
 		BriarCoreModule.class,
 		BrambleAndroidModule.class,

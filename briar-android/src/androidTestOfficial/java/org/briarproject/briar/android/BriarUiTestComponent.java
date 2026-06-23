@@ -11,6 +11,7 @@ import org.briarproject.briar.android.account.SignInTestCreateAccount;
 import org.briarproject.briar.android.account.SignInTestSignIn;
 import org.briarproject.briar.android.attachment.AttachmentModule;
 import org.briarproject.briar.android.attachment.media.MediaModule;
+import org.briarproject.briar.android.call.AndroidCallModule;
 import org.briarproject.briar.android.navdrawer.NavDrawerActivityTest;
 
 import javax.inject.Singleton;
@@ -23,6 +24,7 @@ import dagger.Component;
 		AttachmentModule.class,
 		ClockModule.class,
 		MediaModule.class,
+		AndroidCallModule.class,
 		RemovableDriveModule.class,
 		BriarCoreModule.class,
 		BrambleAndroidModule.class,
